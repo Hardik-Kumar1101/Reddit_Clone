@@ -32,7 +32,7 @@
         </div>
 
         <div class="dropdown">
-            <a th:href="@{/posts}" class="dropbtn">Home</a>
+            <a th:href="@{/}" class="dropbtn">Home</a>
             <div class="dropdown-content">
                 <form th:action="@{/subreddit}" method="get" class="search-form">
                      <span class="material-symbols-outlined">
@@ -73,7 +73,7 @@
         </a>
 
         <div sec:authorize="isAnonymous()" class="auth">
-            <a th:href="@{/register}">Resister</a>
+            <a th:href="@{/register}">Sign Up</a>
             <a th:href="@{/login}">Login</a>
         </div>
 
@@ -115,7 +115,7 @@
             <div class="card" th:each="post : ${posts}">
                 <div th:if="${post != null}">
                     <h5 th:text="${post.subreddit.name}">Author Name</h5>
-                    <h2><a th:if="${post.isPublished == true}" th:href="@{${post.postId}}" th:text="${post.postName}">Title</a></h2>
+                    <h2><a th:if="${post.isPublished == true}" th:href="@{'/posts/'+${post.postId}}" th:text="${post.postName}">Title</a></h2>
                     <h5 th:text="${#temporals.format(post.publishedAt, 'dd/MM/yyyy, hh:mm a')}"></h5>
                     <p th:text="${post.description}"></p>
 
@@ -151,7 +151,7 @@
                             <span class="material-symbols-outlined">arrow_downward</span>
                         </button>
                     </form>
-                    <form th:action="@{'/'+${post.postId}}" method="get">
+                    <form th:action="@{'/posts/'+${post.postId}}" method="get">
                         <button type="submit">
                             <span class="material-symbols-outlined">
                             comment
