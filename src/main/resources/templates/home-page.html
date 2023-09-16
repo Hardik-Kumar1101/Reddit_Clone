@@ -164,7 +164,8 @@
             </div>
 
             <div class="card" th:each="post : ${posts}">
-                <h5 th:text="${post.subreddit.name}">Author Name</h5>
+                <h5 th:text="${post.subreddit.name}">Subreddit Name</h5>
+                <h7 th:text="${post.user.username}">Author Name</h7>
                 <h2><a th:href="@{'/posts/'+${post.postId}}" th:text="${post.postName}">Title</a></h2>
                  <h5 th:text="${#temporals.format(post.publishedAt, 'dd/MM/yyyy, hh:mm a')}"></h5>
                 <p th:text="${post.description}"></p>
