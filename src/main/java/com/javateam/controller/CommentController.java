@@ -43,7 +43,7 @@ public class CommentController {
         comment.setContent(content);
 
         commentService.saveComment(comment);
-        return "redirect:/"+post.getPostId();
+        return "redirect:/posts/"+post.getPostId();
     }
     @PostMapping("/replyOnComment/{commentId}")
     public String saveReplyComment(@PathVariable Integer commentId, @RequestParam String content) {
@@ -73,7 +73,7 @@ public class CommentController {
             commentService.saveComment(newReplyComment);
         }
 
-        return "redirect:/" + parentComment.getPost().getPostId();
+        return "redirect:/posts/" + parentComment.getPost().getPostId();
     }
 
     @GetMapping("/viewReplies/{commentId}")
@@ -112,14 +112,14 @@ public class CommentController {
             return "redirect:/profile/comment";
         }
 
-        return "redirect:/" + existingComment.getPost().getPostId();
+        return "redirect:/posts/" + existingComment.getPost().getPostId();
     }
 
     @GetMapping("/cancelEdit/{commentId}")
     public String cancelEdit(@PathVariable Integer commentId) {
         Comment comment = commentService.getCommentById(commentId);
 
-        return "redirect:/" + comment.getPost().getPostId();
+        return "redirect:/posts/" + comment.getPost().getPostId();
     }
 
     @GetMapping("/profile/cancelEdit/{commentId}")
@@ -134,7 +134,7 @@ public class CommentController {
         Comment comment = commentService.getCommentById(commentId);
         commentService.deleteCommentById(commentId);
 
-        return "redirect:/" + comment.getPost().getPostId();
+        return "redirect:/posts/" + comment.getPost().getPostId();
     }
     @GetMapping("/profile/deleteComment/{commentId}")
     public String deleteProfileComment(@PathVariable Integer commentId) {
@@ -177,7 +177,7 @@ public class CommentController {
             return "redirect:/viewReplies/"+comment.getParentComment().getCommentId();
         }
 
-        return "redirect:/"+comment.getPost().getPostId();
+        return "redirect:/posts/"+comment.getPost().getPostId();
     }
 
     @GetMapping("/comments/downvote/{commentId}/{voteType}")
@@ -214,7 +214,7 @@ public class CommentController {
             return "redirect:/viewReplies/"+comment.getParentComment().getCommentId();
         }
 
-        return "redirect:/"+comment.getPost().getPostId();
+        return "redirect:/posts/"+comment.getPost().getPostId();
     }
 
 }

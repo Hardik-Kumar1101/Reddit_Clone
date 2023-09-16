@@ -62,7 +62,7 @@ public class UserController {
         user.setPassword(bcryptPassword);
         userService.saveUser(user);
 
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
     @GetMapping("/updateUser")
@@ -172,7 +172,7 @@ public class UserController {
         }
         userService.saveUser(existingUser);
 
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
 }

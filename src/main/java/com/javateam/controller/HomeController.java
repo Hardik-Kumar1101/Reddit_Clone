@@ -42,7 +42,7 @@ public class HomeController {
         this.subredditRepository = subredditRepository;
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/")
     public String getAllPosts(Model model) {
         List<Post> posts = postService.findAll();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -144,12 +144,13 @@ public class HomeController {
         else if(action.equals("Update")){
             return "redirect:/"+post.getPostId();
         }
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
-    @GetMapping("/{postId}")
-    public String getPost(@PathVariable Integer postId, Model model) {
-        Post post = postService.findById(postId);
+    @GetMapping("/posts/{postId}")
+    public String getPost(@PathVariable String postId, Model model) {
+        Integer postId1 = Integer.parseInt(postId);
+        Post post = postService.findById(postId1);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
 
@@ -208,7 +209,7 @@ public class HomeController {
 
         postService.save(subreddit);
 
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
     @PostMapping("/update-post/{postId}")
@@ -236,14 +237,14 @@ public class HomeController {
         post.setIsPublished(true);
         post.setPublishedAt(LocalDateTime.now());
         postService.save(post);
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
     @PostMapping("/delete-post/{postId}")
     public String deletePost(@PathVariable Integer postId) {
         postService.deleteById(postId);
 
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
     @GetMapping("/login")
@@ -290,7 +291,7 @@ public class HomeController {
             return "redirect:/"+post.getPostId();
         }
 
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
     @GetMapping("/posts/downvote/{postId}/{voteType}")
@@ -333,7 +334,7 @@ public class HomeController {
             return "redirect:/"+post.getPostId();
         }
 
-        return "redirect:/posts";
+        return "redirect:/";
     }
 
     @GetMapping("/subreddit/r/{subredditName}")
@@ -371,7 +372,7 @@ public class HomeController {
             model.addAttribute("user", user);
         }
         if (subredditName == null || subredditName.isEmpty()) {
-            return "redirect:/posts";
+            return "redirect:/";
         }
 
         model.addAttribute("subredditList", subredditList);
@@ -392,7 +393,7 @@ public class HomeController {
         }
 
         if (text == null || text.isEmpty()) {
-            return "redirect:/posts";
+            return "redirect:/";
         }
 
         model.addAttribute("subredditList", subredditList);
@@ -476,7 +477,6 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
         List<Comment> commentList  = user.getComments();
-        //List<Comment> commentList = user != null ? user.getComments() : new ArrayList<>();
         List<Subreddit> subredditList = postService.findAllSubreddit();
 
         model.addAttribute("subredditList", subredditList);
@@ -523,16 +523,17 @@ public class HomeController {
         Post post = postService.findById(postId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
-
         Vote existingVote = postService.findVoteByUserAndPost(user, post);
 
         if (existingVote != null) {
+
             if (existingVote.getVoteType() != voteType) {
                 existingVote.setVoteType(voteType);
                 postService.updateVote(existingVote);
                 Integer voteCount = post.getVoteCount();
                 post.setVoteCount(voteCount - 1);
             }
+
         } else {
             Vote vote = new Vote();
             vote.setPost(post);
@@ -546,13 +547,14 @@ public class HomeController {
         }
 
         postService.save(post);
-        model.addAttribute("voteType", voteType);
 
         if(originalUrl.contains("profile/posts")) {
             return "redirect:/profile/posts";
         } else if(originalUrl.contains("/profile/upvote")) {
             return "redirect:/profile/upvote";
         }
+
+        model.addAttribute("voteType", voteType);
 
         return "redirect:/profile/downvote";
     }
@@ -566,6 +568,7 @@ public class HomeController {
         Vote existingVote = postService.findVoteByUserAndPost(user, post);
 
         if (existingVote != null) {
+
             if (existingVote.getVoteType() != voteType) {
                 existingVote.setVoteType(voteType);
                 postService.updateVote(existingVote);
@@ -573,6 +576,7 @@ public class HomeController {
                 post.setVoteCount(voteCount + 1);
 
             }
+
         } else {
             Vote vote = new Vote();
             vote.setPost(post);

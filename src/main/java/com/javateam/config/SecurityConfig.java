@@ -40,7 +40,7 @@ public class SecurityConfig {
                         form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/authenticateUser")
-                                .defaultSuccessUrl("/posts")
+                                .defaultSuccessUrl("/")
                                 .permitAll()
                 )
                 .logout(logout ->
